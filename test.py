@@ -1,3 +1,2 @@
 
-while (result := "➡️ Joueur suivant") == "➡️ Joueur suivant":
-    move = get_player_move() if p_types[current] == "h" else bot_move(board, symbols[current - 1], "always-win" if p_types[current] == "w" else "random")
+lines = board + [[board[r][c] for r in range(3)] for c in range(3)]
