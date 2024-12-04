@@ -12,4 +12,4 @@ def check_winner(board):
     for line in lines:
         if line[0] == line[1] == line[2] and line[0] in ["X", "O"]:
             return f"🏆 Victoire: {line[0]}"
-    return "🤝 Match nul" if all(cell != " " for row in board for cell in row) else "➡️ Joueur suivant"
+    return "🤝 Match nul" if all(cell != " " for row in board for cell in row) else "➡️ Joueur suivante"
