@@ -3,38 +3,34 @@ import random
 from logic import check_winner
 
 # Fonction qui permet au bot de faire un mouvement
-# Paramètres :
-# - board : l'état actuel du plateau de jeu (une matrice 3x3)
-# - symbol : le symbole du bot ("X" ou "O")
-# - difficulty : niveau de difficulté du bot (par défaut "random", sinon "always-win")
 def bot_move(board, symbol, difficulty="random"):
     # Trouver toutes les cases vides sur le plateau
     empty_cells = [(r, c) for r in range(3) for c in range(3) if board[r][c] == " "]
     # Si aucune case vide n'est disponible, retourner None (aucun mouvement possible)
     if not empty_cells: return None
 
-    # Identifier le symbole de l'adversaire (si le bot est "O", l'adversaire est "X" et vice versa)
+    # Identifier le symbole de l'adversaire
     opponent = "X" if symbol == "O" else "O"
 
-    # Si la difficulté est "always-win", le bot essaie de gagner ou de bloquer l'adversaire
+    # Si la difficulté est "always-win", le bot essaie d'abord de bloquer l'adversaire, ensuite de gagner
     if difficulty == "always-win":
-        # Chercher un coup gagnant pour le bot
-        for r, c in empty_cells:
-            board[r][c] = symbol  # Simuler le mouvement
-            # Si ce mouvement fait gagner le bot, retourner cette position
-            if check_winner(board).startswith("\ud83c\udf40"): 
+        # Chercher un coup pour bloquer une victoire de l'adversaire ou gagner
+        for target in [opponent, symbol]:
+            for r, c in empty_cells:
+                board[r][c] = target  # Simuler le mouvement
+                if check_winner(board) == target:
+                    board[r][c] = " "  # Annuler le mouvement simulé
+                    return r, c
                 board[r][c] = " "  # Annuler le mouvement simulé
-                return r, c
-            board[r][c] = " "  # Annuler le mouvement simulé
 
-        # Chercher un coup pour bloquer une victoire de l'adversaire
-        for r, c in empty_cells:
-            board[r][c] = opponent  # Simuler le mouvement de l'adversaire
-            # Si l'adversaire gagne avec ce mouvement, retourner cette position pour bloquer
-            if check_winner(board).startswith("\ud83c\udf40"): 
-                board[r][c] = " "  # Annuler le mouvement simulé
+        # Prendre le centre si disponible
+        if (1, 1) in empty_cells:
+            return 1, 1
+
+        # Chercher un coup stratégique si aucun mouvement gagnant ou bloquant n'est trouvé
+        for r, c in [(0, 0), (0, 2), (2, 0), (2, 2), (0, 1), (1, 0), (1, 2), (2, 1)]:
+            if (r, c) in empty_cells:
                 return r, c
-            board[r][c] = " "  # Annuler le mouvement simulé
 
     # Si aucun mouvement gagnant ou bloquant n'est trouvé, choisir aléatoirement une case vide
     return random.choice(empty_cells)
