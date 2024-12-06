@@ -17,6 +17,6 @@ def get_player_move():
             # Si oui, retourne les valeurs de 'row' et 'col', ce qui termine la boucle 'while'
             if row in range(3) and col in range(3): return row, col
         # Si une erreur de valeur se produit (par exemple, si l'entrée n'est pas un entier),
-        # ignore l'erreur et continue la boucle
+        # ignore l'erreur et continue la boucle essaie
         except ValueError: pass
         print("⚠️ Valeurs entre 0 et 2.")
